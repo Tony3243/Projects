@@ -1,0 +1,261 @@
+import random
+import os
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
+class Start:
+    def __init__(self, start, choose_shooter, choose_keeper, best_out_of_three, restart = True):
+        self.start = start
+        self.choose_shooter = choose_shooter
+        self.choose_keeper = choose_keeper
+        self.best_out_of_three = best_out_of_three
+        self.restart = restart
+
+    def introduction(self):
+        print("Welcome to the best penalty shootout with the best current players in fútbol!")
+        input()
+        clear_screen()
+        print("Best of three wins!!")
+        input()
+        clear_screen()
+        print("My name is Peter Drury and alongside me is Jim Beglin ready to commentate on the worlds biggest event!")
+        print("press return to continue!")
+        input()
+        clear_screen()
+
+    def shooters(self):
+        shooter_names = list(shooter_options.keys())
+        print("Player 1, choose a shooter: ")
+        for i, name in enumerate(shooter_names, 1):
+            print(f"{i}: {name}")
+
+        while True:
+            try:    
+                choice = int(input("Enter the number corresponding to your shooter!"))
+                if 1 <= choice <= len(shooter_names):
+                    name = shooter_names[choice - 1]
+                    shooter = shooter_options[name]
+                    print(f"You have chosen {name}!")
+                    return shooter
+                else:
+                    print("Invalid Choice. Try Again.")
+            except ValueError:
+                print("Please enter a valid number.")
+
+
+    
+    def keepers(self):
+        keeper_names = list(keeper_options.keys())
+        print("Player 2, choose a keeper: ")
+        for i, name in enumerate(keeper_names, 1):
+            print(f"{i}: {name}")
+        
+        while True:
+                choice = int(input("Enter the number corresponding to your keeper!"))
+                if 1 <= choice <= len(keeper_names):
+                    name = keeper_names[choice - 1]
+                    keeper = keeper_options[name]
+                    print(f"You have chosen {name}!")
+                    return keeper
+                else:
+                    print("Invalid Choice. Try again")
+
+
+
+class Shooter:
+    def __init__(self, name, team, play_style, success_rate, statistics):
+        self.name = name
+        self.team = team
+        self.play_style = play_style
+        self.success_rate = success_rate
+        self.statistics = statistics
+     
+    def __repr__(self):
+        return f"Walking to the field is {self.team} hero, {self.name} with a exceptional quality of {self.play_style} \nhaving a success rate of {self.success_rate} % plausability being the {self.statistics}."
+          
+class Keeper:
+    def __init__(self, name, team, play_style, success_rate, statistics):
+        self.name = name
+        self.team = team
+        self.play_style = play_style
+        self.success_rate = success_rate
+        self.statistics = statistics
+    
+    def __repr__(self):
+        return f"\nContesting him is non-other than {self.name} for {self.team} with a disticnt {self.play_style} \nthat makes him {self.success_rate} % undeniable when it comes to penalties having {self.statistics}."
+
+
+class Penalties_Best_of_three:
+    def __init__(self, shooter, keeper):
+        self.shooter = shooter
+        self.keeper = keeper
+    
+    def single_penalties(self):
+        goals = 0
+        saves = 0
+        first_goal = True
+        first_save = True
+
+        for round_num in range(1, 4):
+            print(f"Round {round_num}")
+            if round_num == 2:
+                print(f"Here we are again.")
+                input()
+                clear_screen()
+            if round_num == 3 and goals == saves:
+                break
+            print(f"\n{self.shooter.name} steps up...")
+            print(f"{self.keeper.name} prepares on the line...")
+            print(f"HERE HE GOES AND.......")
+            input()
+            clear_screen()
+
+            shooter_outcome = self.shooter.success_rate
+            keeper_outcome = self.keeper.success_rate / 100
+            accumulative_result = shooter_outcome * (1 - keeper_outcome)
+            
+            outcome = random.choices(
+            population=["Stunning GOAL!!", "What a STOP!!"],
+            weights = [accumulative_result, 1 - accumulative_result],
+            k=1
+        )[0]
+            print(f"{outcome} !")
+            input()
+            clear_screen()
+
+
+            if "GOAL" in outcome:
+                goals += 1
+                
+                if first_goal:
+                    print(f"That is one for {self.shooter.name} still with confidence!")
+                    first_goal = False
+                    input()
+                    clear_screen()
+                if goals > saves and round_num == 1:
+                    print("Next point for the shooter wins")
+            else: 
+                saves += 1
+
+                if first_save:
+                    print(f"That is one save for {self.keeper.name} still with confidence!")
+                    first_save = False
+                if saves > goals and round_num == 1:
+                    print("If the goalkeeper saves another consecutive shot. We will become champion")
+                    input()
+                    clear_screen()
+            
+            if goals == 2 and goals > saves:
+                print(f"{self.shooter.name} HAS DONE IT AND HAS WON THE PENALTY SHOOUTOUT FOR {self.shooter.team}!!")
+                return
+            elif saves == 2:
+                print(f"FANTASTIC SAVE!{self.keeper.name} HAS WON IT AND SENDS {self.keeper.team} INTO THE HISTROY BOOKS")
+                return
+            
+        print("It is now tied and next point wins producing the most dramatic sporting event in history!")
+
+        if round_num == 3:
+            input()
+            clear_screen()
+            print(f"""And so it comes down to this… 
+                One kick. One save. One heartbeat away from immortality. 
+                The weight of a nation… the silence of a stadium… History, balanced on the brink… 
+                He steps up—not just for himself, but for every soul who dared to dream.
+                Will he be the hero… or will the keeper write his own legend?""")
+            input()
+            clear_screen() 
+            print(f"\n{self.shooter.name} steps up...")
+            print(f"{self.keeper.name} prepares on the line...")
+            print(f"HERE HE GOES AND.......")
+            input()
+            clear_screen()
+        
+        sudden_death_outcome = random.choices(
+           population = ["Stunning GOAL !!!!", "What a STOP!!"],
+           weights = [accumulative_result, 1 - accumulative_result],
+           k = 1
+       )[0]
+        print(sudden_death_outcome)
+        
+
+        if "GOAL" in sudden_death_outcome:
+            print(f"""And {self.shooter.name} done it! Ecstasy unleashed!
+                A nation erupts, a dream fulfilled!
+                Football, in all its cruelty and beauty, has chosen its champion""")
+        else:
+            print("""Oh, hes saved it!
+                He has soared into history—gloved hands delivering glory!
+                And just like that… it is over.
+                Agony and elation, written in the blink of a moment!""")
+        
+    
+
+    
+
+englands_number9 = Shooter("Harry Kane", "Bayern Munich", "Five Star Week Foot", 0.88, "All time leading goal scorer for England")
+egyptian_king = Shooter("Mohammad Salah", "Liverpool", "finesse shot", 0.84, "This seasons most prolific player with an unbeliveable 40 G/A contributions")
+canadian_french = Shooter("Jonathan David", "Lilie", "Ball Control", 0.83, "player averaging 0.66 goals per 90 minutes")
+ninja_turtle = Shooter("Kylian Mbappe", "Real Madrid", "rocket Pace", 0.83, "the fastest player to reach 500 career goal contributions, surpassing Lionel Messi and Cristiano Ronaldo")
+viking = Shooter("Erling Haaland", "Manchester City", "strength", 0.86, "being the most being created being in the world being the player to match Cristiano Ronaldo's record by reaching 100 goals across all competitions for a single club in just 105 appearances.")           
+
+italian_giant = Keeper("Gianluigi Donnarumma", "PSG", "Composure", 25.9, "won the Yashin Trophy in 2021 as the best goalkeeper in the world while still being titled as one of the top 5 in the world.")
+brazilian_scouser = Keeper("Alisson Becker", "Liverpool", "line rush", 40.6, "the entitlement of being the most expensive goalkeeper at the time in 2019 when he transferred from AC Roma to Liverpool." )
+madrids_savior = Keeper("Thibaut Courtois", "Real Madrid", "aura in finals", 17.14, "his cabnet full with 3 La Liga Trophies, 2 UEFA Champions Trophies, and Globe Soccer Career Award just to name a few.")
+Barcelonas_nightmare = Keeper("Yann Sommer", "Inter Milan", "Quick Reflexes", 17.17, " His ability to perform under pressure has earned him the nickname “The Penalty Killer.")
+local_dutch = Keeper("Mark Flekken", "Brentford", "anticipation", 0.05, "won 6 domestic league trophies so far in his exceptional career.")
+
+
+shooter_options = {
+    "Harry Kane": englands_number9, 
+    "Mohammad Salah": egyptian_king,
+    "Jonathan David": canadian_french,
+    "Kylian Mbappe": ninja_turtle,
+    "Erling Haaland": viking
+}
+
+keeper_options = {
+    "Gianluigi Donnarumma": italian_giant,
+    "Alisson Becker": brazilian_scouser,
+    "Thibaut Courtois": madrids_savior,
+    "Yann Sommer": Barcelonas_nightmare,
+    "Mark Flekken": local_dutch
+}
+
+while True: #while loop runs the code forever making user play the games as many times
+
+    welcome = Start(start = True, choose_shooter = True, choose_keeper = True, best_out_of_three = True)
+
+    welcome.introduction()
+    chosen_shooter = welcome.shooters()
+    input()
+    clear_screen()
+    chosen_keeper = welcome.keepers()
+
+    input()
+    clear_screen()
+    print(chosen_shooter)
+
+    input()
+    clear_screen()
+    print(chosen_keeper)
+
+    input()
+    clear_screen()
+    penalty_round = Penalties_Best_of_three(shooter = chosen_shooter,keeper = chosen_keeper)
+    penalty_round.single_penalties()
+
+    play_again = input("\nWould you like to relive the expereince? (yes/no)").strip().lower()
+    if play_again != "yes":
+        print("Boring")
+        input()
+        clear_screen()
+        break
+
+
+
+
+
+
+
